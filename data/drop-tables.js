@@ -8,7 +8,7 @@ async function run() {
         await client.connect();
     
         await client.query(`
-            DROP TABLE IF EXISTS todos;
+            DROP TABLE IF EXISTS favorites;
             DROP TABLE IF EXISTS users;
         `);
 

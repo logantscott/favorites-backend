@@ -17,11 +17,17 @@ async function run() {
                     email VARCHAR(256) NOT NULL,
                     hash VARCHAR(512) NOT NULL
                 );           
-                CREATE TABLE todos (
+                CREATE TABLE favorites (
                     id SERIAL PRIMARY KEY NOT NULL,
-                    task VARCHAR(512) NOT NULL,
-                    user_id INTEGER NOT NULL REFERENCES users(id),
-                    complete BOOLEAN NOT NULL DEFAULT FALSE
+                    name VARCHAR(256) NOT NULL,
+                    url VARCHAR(256) NOT NULL,
+                    image_url VARCHAR(256) NOT NULL,
+                    thumb_url VARCHAR(256) NOT NULL,
+                    min_players INTEGER NOT NULL,
+                    max_players INTEGER NOT NULL,
+                    min_playtime INTEGER NOT NULL,
+                    max_playtime INTEGER NOT NULL,
+                    user_id INTEGER NOT NULL REFERENCES users(id)
             );
         `);
 

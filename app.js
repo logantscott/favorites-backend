@@ -5,6 +5,7 @@ const express = require('express');
 // (add cors, pg, and morgan...)
 const cors = require('cors');
 const morgan = require('morgan');
+const Request = require('superagent');
 
 // Database Client
 // (create and connect using DATABASE_URL)
@@ -79,22 +80,80 @@ app.get('/users', async(req, res, next) => {
     }
 });
 
-// app.get('/api/todos', async(req, res, next) => {
-//     try {
-//         const result = await client.query(`
-//             SELECT
-//                 *
-//             FROM todos
-//             WHERE user_id = $1
-//             ORDER BY id;
-//         `,
-//         [req.userId]);
+app.get('/api/games', async(req, res, next) => {
+    try {
 
-//         res.json(result.rows);
-//     } catch (err) {
-//         next(err);
-//     }
-// });
+        const data = await Request.get(`https://www.boardgameatlas.com/api/search?name=${req.query.search}&client_id=${process.env.CLIENTID}`);
+
+        res.json(data.body);
+
+        // const result = await client.query(`
+        //     SELECT
+        //         *
+        //     FROM todos
+        //     WHERE user_id = $1
+        //     ORDER BY id;
+        // `,
+        // [req.userId]);
+
+        // res.json(result.rows);
+    } catch (err) {
+        next(err);
+    }
+});
+
+app.get('/api/favorites', async(req, res, next) => {
+    try {
+
+        const result = await client.query(`
+            SELECT
+                *
+            FROM favorites
+            WHERE user_id = $1
+            ORDER BY id;
+        `,
+        [req.userId]);
+
+        res.json(result.rows);
+
+    } catch (err) {
+        next(err);
+    }
+});
+
+app.post('/api/favorites', async(req, res, next) => {
+    try {
+
+        const result = await client.query(`
+        INSERT INTO favorites (name, url, image_url, thumb_url, min_players, max_players, min_playtime, max_playtime, user_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        RETURNING *;
+        `,
+        [req.body.name, req.body.url, req.body.image_url, req.body.thumb_url, req.body.min_players, req.body.max_players, req.body.min_playtime, req.body.max_playtime, req.userId]);
+
+        res.json(result.rows[0]);
+
+    } catch (err) {
+        next(err);
+    }
+});
+
+app.delete('/api/favorites', async(req, res, next) => {
+    try {
+
+        const result = await client.query(`
+            DELETE FROM favorites
+            WHERE id = $1 AND user_id = $2
+            RETURNING *;
+        `,
+        [req.body.id, req.userId]);
+
+        res.json(result.rows[0]);
+
+    } catch (err) {
+        next(err);
+    }
+});
 
 // app.post('/api/todos', async(req, res, next) => {
 //     try {

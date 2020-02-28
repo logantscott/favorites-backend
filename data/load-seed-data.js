@@ -1,7 +1,7 @@
 const client = require('../lib/client.js');
 
 // import our seed data:
-const todos = require('./todos');
+const favorites = require('./favorites.js');
 
 run();
 
@@ -17,12 +17,12 @@ async function run() {
         ['Logan', 'email', '$2a$08$ci7QiQzRkMk1WjimolST5e9/a0Atg6InI6RxHh4l.DtaMu6vN3eV6']);
 
         await Promise.all(
-            todos.map(todo => {
+            favorites.map(favorite => {
                 return client.query(`
-                    INSERT INTO todos (task, complete, user_id)
-                    VALUES ($1, $2, $3);
+                    INSERT INTO favorites (name, url, image_url, thumb_url, min_players, max_players, min_playtime, max_playtime, user_id)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);
                 `,
-                [todo.task, todo.complete, todo.user_id]);
+                [favorite.name, favorite.url, favorite.image_url, favorite.thumb_url, favorite.min_players, favorite.max_players, favorite.min_playtime, favorite.max_playtime, 1]);
             })
         );
 

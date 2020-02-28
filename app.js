@@ -82,8 +82,8 @@ app.get('/users', async(req, res, next) => {
 
 app.get('/api/games', async(req, res, next) => {
     try {
-
-        const data = await Request.get(`https://www.boardgameatlas.com/api/search?name=${req.query.search}&client_id=${process.env.CLIENTID}`);
+        console.log(`https://www.boardgameatlas.com/api/search?name=${req.query.search}&client_id=${process.env.CLIENTID}`);
+        const data = await Request.get(`https://www.boardgameatlas.com/api/search?name=${req.query.search}&client_id=${process.env.CLIENTID}&limit=20`);
 
         res.json(data.body);
 

@@ -22,12 +22,13 @@ async function run() {
                     name VARCHAR(256) NOT NULL,
                     url VARCHAR(256) NOT NULL,
                     image_url VARCHAR(256) NOT NULL,
-                    thumb_url VARCHAR(256) NOT NULL,
+                    external_id VARCHAR(256) NOT NULL,
                     min_players INTEGER NOT NULL,
                     max_players INTEGER NOT NULL,
                     min_playtime INTEGER NOT NULL,
                     max_playtime INTEGER NOT NULL,
-                    user_id INTEGER NOT NULL REFERENCES users(id)
+                    user_id INTEGER NOT NULL REFERENCES users(id),
+                    unique (user_id, external_id)
             );
         `);
 

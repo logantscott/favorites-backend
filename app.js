@@ -123,13 +123,13 @@ app.get('/api/favorites', async(req, res, next) => {
 
 app.post('/api/favorites', async(req, res, next) => {
     try {
-
+        console.log(req);
         const result = await client.query(`
-        INSERT INTO favorites (name, url, image_url, thumb_url, min_players, max_players, min_playtime, max_playtime, user_id)
+        INSERT INTO favorites (name, url, image_url, external_id, min_players, max_players, min_playtime, max_playtime, user_id)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING *;
         `,
-        [req.body.name, req.body.url, req.body.image_url, req.body.thumb_url, req.body.min_players, req.body.max_players, req.body.min_playtime, req.body.max_playtime, req.userId]);
+        [req.body.name, req.body.url, req.body.image_url, req.body.external_id, req.body.min_players, req.body.max_players, req.body.min_playtime, req.body.max_playtime, req.userId]);
 
         res.json(result.rows[0]);
 
